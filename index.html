@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real World CE | Myelofibrosis Elite Module</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
+  
+  <style>
+    :root{
+      --navy:#081528;
+      --navy-2:#0d2342;
+      --blue:#2563eb;
+      --sky:#63b3ff;
+      --cyan:#7dd3fc;
+      --slate:#0f172a;
+      --border:rgba(148,163,184,.16);
+      --panel:rgba(255,255,255,.84);
+      --glass:blur(22px);
+      --shadow:0 20px 60px rgba(2,6,23,.10);
+      --shadow-strong:0 28px 84px rgba(15,23,42,.16);
+      --shadow-soft:0 14px 36px rgba(15,23,42,.08);
+    }
+
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:'Inter',sans-serif;
+      min-height:100vh;
+      color:#0f172a;
+      background:
+        radial-gradient(circle at top left, rgba(96,165,250,.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(56,189,248,.14), transparent 30%),
+        radial-gradient(circle at 50% 120%, rgba(59,130,246,.08), transparent 32%),
+        linear-gradient(180deg, #f8fbff 0%, #eef5ff 45%, #f8fafc 100%);
+    }
+
+    .custom-scroll::-webkit-scrollbar { width: 8px; height:8px; }
+    .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(148,163,184,.55); border-radius: 999px; }
+
+    .glass-panel{
+      background:var(--panel);
+      backdrop-filter:var(--glass);
+      -webkit-backdrop-filter:var(--glass);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+    }
+
+    .glass-dark{
+      position:relative;
+      background:
+        radial-gradient(circle at 16% 12%, rgba(125,211,252,.14), transparent 20%),
+        radial-gradient(circle at 86% 20%, rgba(96,165,250,.10), transparent 20%),
+        linear-gradient(180deg, rgba(8,21,40,.96), rgba(13,35,66,.92));
+      backdrop-filter:blur(24px);
+      -webkit-backdrop-filter:blur(24px);
+      border-right:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--shadow-strong);
+      overflow:hidden;
+      isolation:isolate;
+    }
+
+    .glass-dark::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0) 22%),
+        radial-gradient(circle at top right, rgba(125,211,252,.08), transparent 28%);
+      pointer-events:none;
+      z-index:0;
+    }
+
+    .glass-dark::after{
+      content:"";
+      position:absolute;
+      right:0;
+      top:0;
+      bottom:0;
+      width:2px;
+      background:linear-gradient(180deg, rgba(125,211,252,.06), rgba(125,211,252,.62), rgba(59,130,246,.14));
+      box-shadow:0 0 20px rgba(125,211,252,.24);
+      pointer-events:none;
+      z-index:1;
+    }
+
+    .sidebar-glow{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      overflow:hidden;
+    }
+
+    .sidebar-glow::before,
+    .sidebar-glow::after{
+      content:"";
+      position:absolute;
+      border-radius:999px;
+      filter:blur(28px);
+      opacity:.5;
+      animation:floatGlow 10s ease-in-out infinite;
+    }
+
+    .sidebar-glow::before{
+      width:180px;
+      height:180px;
+      top:3%;
+      left:-36px;
+      background:radial-gradient(circle, rgba(125,211,252,.30), rgba(125,211,252,0));
+    }
+
+    .sidebar-glow::after{
+      width:220px;
+      height:220px;
+      bottom:8%;
+      right:-56px;
+      background:radial-gradient(circle, rgba(59,130,246,.24), rgba(59,130,246,0));
+      animation-delay:2s;
+    }
+
+    .fade-in { animation: fadeIn .45s ease-out forwards; }
+    .slide-up { animation: slideUp .45s ease-out forwards; }
+    .lift { transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+    .lift:hover { transform:translateY(-2px); box-shadow:var(--shadow-strong); }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:.4rem;
+      padding:.45rem .8rem;
+      border-radius:999px;
+      font-size:.75rem;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.10);
+      color:#dbeafe;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .hero-mesh{
+      background:
+        radial-gradient(circle at 20% 20%, rgba(125,211,252,.28), transparent 22%),
+        radial-gradient(circle at 80% 18%, rgba(59,130,246,.28), transparent 24%),
+        radial-gradient(circle at 70% 80%, rgba(14,165,233,.18), transparent 24%),
+        linear-gradient(135deg, #071528 0%, #0d2342 42%, #12305d 100%);
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.10);
+    }
+
+    .hero-mesh::before,
+    .hero-mesh::after{
+      content:"";
+      position:absolute;
+      inset:auto;
+      border-radius:999px;
+      filter:blur(12px);
+      opacity:.55;
+      pointer-events:none;
+    }
+
+    .hero-mesh::before{
+      width:240px;
+      height:240px;
+      top:-80px;
+      right:-40px;
+      background:radial-gradient(circle, rgba(125,211,252,.85), rgba(125,211,252,0));
+    }
+
+    .hero-mesh::after{
+      width:220px;
+      height:220px;
+      bottom:-90px;
+      left:-40px;
+      background:radial-gradient(circle, rgba(59,130,246,.70), rgba(59,130,246,0));
+    }
+
+    .floating-orb{
+      position:absolute;
+      border-radius:999px;
+      filter:blur(6px);
+      opacity:.25;
+      animation:floatOrb 8s ease-in-out infinite;
+    }
+
+    .orb-a{ width:110px; height:110px; background:#7dd3fc; top:16%; left:58%; }
+    .orb-b{ width:76px; height:76px; background:#60a5fa; bottom:18%; right:22%; animation-delay:1.6s; }
+    .orb-c{ width:52px; height:52px; background:#93c5fd; top:58%; left:18%; animation-delay:3.1s; }
+
+    .stat-card{
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(248,250,252,.95));
+      border:1px solid rgba(148,163,184,.16);
+      border-radius:1.25rem;
+      padding:1.1rem;
+      box-shadow:0 16px 50px rgba(15,23,42,.08);
+    }
+
+    .stat-card::after{
+      content:"";
+      position:absolute;
+      inset:auto -40px -40px auto;
+      width:110px;
+      height:110px;
+      border-radius:999px;
+      background:radial-gradient(circle, rgba(96,165,250,.16), transparent 65%);
+    }
+
+    .section-shell{
+      max-width:1100px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:minmax(0,1fr);
+      gap:1.5rem;
+    }
+
+    .gradient-rose{ background:linear-gradient(135deg, #7f1d1d 0%, #be123c 40%, #fb7185 100%); }
+    .gradient-blue{ background:linear-gradient(135deg, #0b1f3a 0%, #1d4ed8 48%, #60a5fa 100%); }
+    .gradient-emerald{ background:linear-gradient(135deg, #064e3b 0%, #0f766e 48%, #2dd4bf 100%); }
+
+    .feature-card{
+      background:linear-gradient(180deg, rgba(255,255,255,.97), rgba(255,255,255,.90));
+      border:1px solid rgba(148,163,184,.18);
+      border-radius:1.25rem;
+      padding:1.2rem;
+      box-shadow:0 14px 40px rgba(15,23,42,.08);
+    }
+
+    .section-header-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:1.5rem;
+      padding:1.4rem;
+      color:white;
+      box-shadow:var(--shadow-strong);
+    }
+
+    .section-header-card::after{
+      content:"";
+      position:absolute;
+      inset:auto;
+      width:180px;
+      height:180px;
+      right:-60px;
+      top:-60px;
+      border-radius:999px;
+      background:radial-gradient(circle, rgba(255,255,255,.22), rgba(255,255,255,0));
+    }
+
+    .nav-btn{
+      width:100%;
+      text-align:left;
+      padding:.95rem 1rem;
+      border-radius:1rem;
+      display:flex;
+      gap:.8rem;
+      align-items:flex-start;
+      transition:all .22s ease;
+      border:1px solid transparent;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .nav-btn::after{
+      content:"";
+      position:absolute;
+      left:0;
+      right:auto;
+      bottom:0;
+      width:0;
+      height:2px;
+      background:linear-gradient(90deg, rgba(125,211,252,.9), rgba(96,165,250,.62));
+      transition:width .24s ease;
+    }
+
+    .nav-btn:hover{
+      background:rgba(255,255,255,.08);
+      border-color:rgba(255,255,255,.08);
+      transform:translateX(2px);
+    }
+
+    .nav-btn:hover::after,
+    .nav-btn.active-rose::after,
+    .nav-btn.active-blue::after,
+    .nav-btn.active-emerald::after{
+      width:100%;
+    }
+
+    .nav-btn.active-rose{ background:rgba(255,241,242,.98); color:#9f1239; border-color:rgba(251,113,133,.28); box-shadow:0 10px 24px rgba(251,113,133,.12); }
+    .nav-btn.active-blue{ background:rgba(239,246,255,.98); color:#1d4ed8; border-color:rgba(96,165,250,.28); box-shadow:0 10px 24px rgba(59,130,246,.12); }
+    .nav-btn.active-emerald{ background:rgba(236,253,245,.98); color:#0f766e; border-color:rgba(45,212,191,.26); box-shadow:0 10px 24px rgba(20,184,166,.12); }
+
+    .nav-icon{
+      width:2rem;height:2rem;border-radius:.8rem;display:flex;align-items:center;justify-content:center;
+      background:rgba(255,255,255,.08); color:rgba(255,255,255,.82); flex-shrink:0;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.05);
+    }
+
+    .progress-track{ height:.62rem; border-radius:999px; background:rgba(226,232,240,.9); overflow:hidden; }
+    .progress-fill{ height:100%; border-radius:999px; background:linear-gradient(90deg, #1d4ed8, #38bdf8); transition:width .35s ease; box-shadow:0 0 18px rgba(56,189,248,.28); }
+
+    .quiz-option{ transition:all .18s ease; }
+    .quiz-option:hover{ transform:translateY(-1px); }
+
+    .medical-grid{
+      display:grid;
+      grid-template-columns:repeat(12, minmax(0,1fr));
+      gap:1rem;
+    }
+
+    .medical-card{
+      border-radius:1.25rem;
+      border:1px solid rgba(148,163,184,.16);
+      background:linear-gradient(180deg, rgba(255,255,255,.98), rgba(248,250,252,.96));
+      box-shadow:0 16px 44px rgba(15,23,42,.08);
+      overflow:hidden;
+    }
+
+    .medical-card-header{
+      padding:1rem 1.1rem;
+      border-bottom:1px solid rgba(226,232,240,.85);
+      background:linear-gradient(180deg, rgba(248,250,252,.95), rgba(255,255,255,.92));
+    }
+
+    .clinical-shell{
+      background:linear-gradient(180deg, rgba(8,15,30,.98), rgba(15,23,42,.96));
+      border:1px solid rgba(96,165,250,.18);
+      border-radius:1.35rem;
+      overflow:hidden;
+      box-shadow:0 20px 50px rgba(15,23,42,.24);
+    }
+
+    .fade-swap { transition: opacity 280ms ease, transform 280ms ease; will-change: opacity, transform; }
+    .swap-hidden { opacity: 0; transform: translateY(6px); pointer-events: none; }
+    .swap-visible { opacity: 1; transform: translateY(0); }
+
+    .dot-grid{
+      background-image:radial-gradient(rgba(255,255,255,.10) 1px, transparent 1px);
+      background-size:16px 16px;
+    }
+
+    .pill{
+      display:inline-flex;align-items:center;gap:.4rem;padding:.42rem .78rem;border-radius:999px;font-size:.73rem;font-weight:700;
+      background:#eff6ff;color:#1d4ed8;border:1px solid rgba(96,165,250,.26);
+    }
+
+    .completion-shell{
+      position:relative;
+      overflow:hidden;
+      border-radius:1.5rem;
+      background:linear-gradient(135deg, #0f172a 0%, #0b1f3a 42%, #0f766e 100%);
+      color:white;
+      box-shadow:var(--shadow-strong);
+    }
+
+    .completion-shell::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(125,211,252,.18), transparent 20%),
+        radial-gradient(circle at 80% 80%, rgba(45,212,191,.16), transparent 22%);
+      pointer-events:none;
+    }
+
+    .mobile-only { display:none; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes floatOrb { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
+    @keyframes floatGlow { 0%,100% { transform:translateY(0) translateX(0); } 50% { transform:translateY(-8px) translateX(6px); } }
+
+    @media (max-width: 1024px){
+      .hero-actions{ flex-direction:column; align-items:flex-start; }
+    }
+
+    @media (max-width: 768px){
+      .mobile-only { display:block; }
+      .desktop-stats { display:none; }
+      .section-shell { gap:1rem; }
+    }
+  </style>
+
+</head>
+<body class="h-screen flex overflow-hidden">
+  
+  <aside id="sidebar" class="glass-dark text-white flex-shrink-0 transition-all duration-300 w-[310px] flex flex-col z-30 absolute md:relative h-full transform md:transform-none -translate-x-full md:translate-x-0">
+    <div class="sidebar-glow"></div>
+
+    <div class="px-5 py-5 border-b border-white/10 relative z-[2]">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <div class="text-[1.05rem] font-black tracking-[0.14em] uppercase">
+            Real World <span class="text-sky-300">CE</span>
+          </div>
+          <div class="text-[10px] uppercase tracking-[0.32em] text-blue-100/70 mt-1">
+            Featuring: Real Data
+          </div>
+        </div>
+
+        <button class="md:hidden text-white/70 hover:text-white" onclick="toggleSidebar()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="px-5 py-4 border-b border-white/10 relative z-[2]">
+      <div class="flex items-center justify-between text-[11px] uppercase tracking-[0.20em] text-blue-100/70 font-semibold">
+        <span>Learning Progress</span>
+        <span id="progress-text">1 / 9</span>
+      </div>
+      <div class="mt-3">
+        <div class="progress-track bg-white/10">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+      </div>
+      <div class="mt-3 text-[11px] text-blue-100/55 leading-relaxed">
+        Navigate the curriculum using the sections below.
+      </div>
+    </div>
+
+    <div class="px-4 py-4 overflow-y-auto custom-scroll flex-1 relative z-[2]">
+      <div class="mb-5 grid grid-cols-3 gap-2 desktop-stats">
+        <div class="rounded-2xl bg-white/6 border border-white/8 p-3">
+          <div class="text-[11px] uppercase tracking-[0.14em] text-blue-100/65">Gaps</div>
+          <div class="text-xl font-black mt-1">3</div>
+        </div>
+        <div class="rounded-2xl bg-white/6 border border-white/8 p-3">
+          <div class="text-[11px] uppercase tracking-[0.14em] text-blue-100/65">Cases</div>
+          <div class="text-xl font-black mt-1">3</div>
+        </div>
+        <div class="rounded-2xl bg-white/6 border border-white/8 p-3">
+          <div class="text-[11px] uppercase tracking-[0.14em] text-blue-100/65">Quiz</div>
+          <div class="text-xl font-black mt-1">3</div>
+        </div>
+      </div>
+
+      <p class="text-[11px] text-blue-100/60 px-2 mb-4 uppercase tracking-[0.25em] font-semibold">Curriculum</p>
+      <div id="nav-container" class="space-y-5"></div>
+    </div>
+
+    <div class="p-4 border-t border-white/10 relative z-[2]">
+      <div class="rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 p-4">
+        <div class="flex items-center gap-2 text-sm font-semibold text-white">
+          <span class="material-symbols-outlined text-sky-300">workspace_premium</span>
+          Hematology Impact Focus
+        </div>
+        <p class="text-xs leading-relaxed text-blue-100/75 mt-2">High production education designed to mirror real-world decision-making in relapsed/refractory Myelofibrosis.</p>
+      </div>
+    </div>
+  </aside>
+
+
+  <div id="sidebar-overlay" class="fixed inset-0 bg-slate-950/50 backdrop-blur-sm z-20 hidden md:hidden" onclick="toggleSidebar()"></div>
+
+  <div class="flex-1 flex flex-col h-full overflow-hidden relative">
+    <header class="sticky top-0 z-20 px-4 md:px-6 pt-4 md:pt-5">
+      <div class="glass-panel rounded-[1.35rem] px-4 md:px-5 py-3">
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4 min-w-0">
+            <button class="md:hidden p-2 rounded-xl hover:bg-slate-100 text-slate-700" onclick="toggleSidebar()">
+              <span class="material-symbols-outlined">menu</span>
+            </button>
+            <div class="min-w-0">
+              <div class="text-[11px] uppercase tracking-[0.22em] text-slate-500 font-semibold">Interactive Clinical Education</div>
+              <div class="flex items-center gap-2 text-sm md:text-base mt-1 min-w-0">
+                <span id="breadcrumb-module" class="font-black text-slate-900 truncate">Module</span>
+                <span class="material-symbols-outlined text-blue-600 text-[18px]">chevron_right</span>
+                <span id="breadcrumb-section" class="font-semibold text-slate-600 truncate">Section</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="flex-1 overflow-y-auto px-4 md:px-6 pb-8 pt-4 custom-scroll"></main>
+  </div>
+
+  <script>
+    const appData = {
+      modules: {
+        post_rux: {
+          title: 'Gap 1: Post-Ruxolitinib',
+          color: 'rose',
+          sections: [
+            { id: 'intro', title: 'The Danger Zone', icon: 'warning' },
+            { id: 'guidelines', title: 'Second-Line Options', icon: 'rule' },
+            { id: 'check1', title: 'Case Study: Robert', icon: 'quiz' },
+          ]
+        },
+        anemia: {
+          title: 'Gap 2: Anemia',
+          color: 'blue',
+          sections: [
+            { id: 'intro', title: 'Prognostic Significance', icon: 'trending_down' },
+            { id: 'momelotinib', title: 'ACVR1 & Momelotinib', icon: 'medication' },
+            { id: 'check2', title: 'Case Study: Sarah', icon: 'quiz' },
+          ]
+        },
+        novel: {
+          title: 'Gap 3: Novel Targets',
+          color: 'emerald',
+          sections: [
+            { id: 'intro', title: 'Exhausted Therapies', icon: 'hourglass_empty' },
+            { id: 'nuvisertib', title: 'PIM1 & Nuvisertib', icon: 'biotech' },
+            { id: 'check3', title: 'Clinical Validation', icon: 'task_alt' },
+          ]
+        }
+      }
+    };
+
+    let activeModuleId = 'post_rux';
+    let activeSectionId = 'intro';
+    let quizStates = {};
+
+    function getAllSections() {
+      const list = [];
+      for (const [moduleId, module] of Object.entries(appData.modules)) {
+        module.sections.forEach(section => list.push({ moduleId, ...section, moduleTitle: module.title, color: module.color }));
+      }
+      return list;
+    }
+
+    function getSectionIndex(moduleId, sectionId) {
+      const all = getAllSections();
+      return all.findIndex(item => item.moduleId === moduleId && item.id === sectionId);
+    }
+
+    function getProgressPercent() {
+      const index = getSectionIndex(activeModuleId, activeSectionId);
+      const total = getAllSections().length;
+      return ((index + 1) / total) * 100;
+    }
+
+    function colorClasses(color) {
+      const map = {
+        rose: {
+          banner: 'gradient-rose',
+          accentBtn: 'bg-rose-600 hover:bg-rose-700',
+          text: 'text-rose-700',
+          soft: 'bg-rose-50 border-rose-100',
+          badge: 'bg-rose-100 text-rose-700 border-rose-200',
+          ring: 'ring-rose-200',
+          gradientText: 'from-rose-500 to-pink-500'
+        },
+        blue: {
+          banner: 'gradient-blue',
+          accentBtn: 'bg-blue-600 hover:bg-blue-700',
+          text: 'text-blue-700',
+          soft: 'bg-blue-50 border-blue-100',
+          badge: 'bg-blue-100 text-blue-700 border-blue-200',
+          ring: 'ring-blue-200',
+          gradientText: 'from-blue-500 to-cyan-500'
+        },
+        emerald: {
+          banner: 'gradient-emerald',
+          accentBtn: 'bg-emerald-600 hover:bg-emerald-700',
+          text: 'text-emerald-700',
+          soft: 'bg-emerald-50 border-emerald-100',
+          badge: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+          ring: 'ring-emerald-200',
+          gradientText: 'from-emerald-500 to-teal-500'
+        }
+      };
+      return map[color];
+    }
+
+    function renderHero(moduleId, kicker, title, text, stats = []) {
+      const module = appData.modules[moduleId];
+      const color = colorClasses(module.color);
+      const statsHtml = stats.map(stat => `
+        <div class="stat-card lift">
+          <div class="text-[11px] uppercase tracking-[0.18em] text-slate-500 font-bold">${stat.label}</div>
+          <div class="text-3xl font-black text-slate-900 mt-2">${stat.value}</div>
+          <div class="text-sm text-slate-600 mt-2 leading-relaxed">${stat.copy}</div>
+        </div>
+      `).join('');
+
+      return `
+        <section class="section-shell slide-up">
+          <div class="hero-mesh rounded-[2rem] p-6 md:p-8 shadow-[0_28px_80px_rgba(15,23,42,.18)] border border-white/10 text-white">
+            <div class="floating-orb orb-a"></div>
+            <div class="floating-orb orb-b"></div>
+            <div class="floating-orb orb-c"></div>
+            <div class="relative z-10 flex flex-col gap-8">
+              <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-6 hero-actions">
+                <div class="max-w-3xl">
+                  <div class="chip mb-4">${kicker}</div>
+                  <h1 class="text-3xl md:text-5xl font-black tracking-tight leading-[1.02] max-w-3xl">${title}</h1>
+                  <p class="mt-4 text-base md:text-lg text-blue-50/88 max-w-2xl leading-relaxed">${text}</p>
+                </div>
+                <div class="glass-panel !bg-white/10 !border-white/10 rounded-[1.35rem] p-4 min-w-[260px] max-w-sm text-left">
+                  <div class="text-[11px] uppercase tracking-[0.18em] text-blue-100/70 font-bold">Why this matters</div>
+                  <div class="mt-2 text-xl font-extrabold">Sequencing choices dictate survival.</div>
+                  <p class="mt-2 text-sm text-blue-50/75 leading-relaxed">This module translates the latest clinical data into actionable treatment sequencing for high-risk myelofibrosis.</p>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">${statsHtml}</div>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderSectionHeader(moduleId, title, copy, label = 'Section Overview') {
+      const module = appData.modules[moduleId];
+      const color = colorClasses(module.color);
+      return `
+        <div class="section-header-card ${color.banner}">
+          <div class="relative z-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div class="max-w-3xl">
+              <div class="chip mb-2">${label}</div>
+              <h2 class="text-2xl md:text-3xl font-black tracking-tight">${title}</h2>
+              <p class="mt-3 text-white/84 text-base leading-relaxed max-w-2xl">${copy}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderNavigationButtons(prev, next) {
+      return `
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-2">
+          <div>${prev ? `<button onclick="navigateTo('${prev.moduleId}', '${prev.sectionId}')" class="inline-flex items-center gap-2 px-4 py-3 rounded-2xl border border-slate-200 bg-white text-slate-700 font-semibold hover:border-slate-300 hover:bg-slate-50 transition"><span class="material-symbols-outlined text-[18px]">arrow_back</span>${prev.label}</button>` : ''}</div>
+          <div>${next ? `<button onclick="navigateTo('${next.moduleId}', '${next.sectionId}')" class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-slate-900 text-white font-semibold hover:bg-slate-800 transition shadow-lg shadow-slate-900/10">${next.label}<span class="material-symbols-outlined text-[18px]">arrow_forward</span></button>` : ''}</div>
+        </div>
+      `;
+    }
+
+    function getPrevNext(moduleId, sectionId) {
+      const all = getAllSections();
+      const index = getSectionIndex(moduleId, sectionId);
+      const prev = index > 0 ? all[index - 1] : null;
+      const next = index < all.length - 1 ? all[index + 1] : null;
+      return {
+        prev: prev ? { moduleId: prev.moduleId, sectionId: prev.id, label: prev.title } : null,
+        next: next ? { moduleId: next.moduleId, sectionId: next.id, label: next.title } : null
+      };
+    }
+
+    function renderQuizComponent(id, question, options, correctIndex, explanation) {
+      const state = quizStates[id] || { submitted: false, selected: null };
+      const isCorrect = state.selected === correctIndex;
+      const optionsHtml = options.map((opt, idx) => {
+        let style = 'bg-white border-slate-200 hover:border-blue-300';
+        let icon = '<div class="w-5 h-5 rounded-full border border-slate-300"></div>';
+        if (!state.submitted && state.selected === idx) {
+          style = 'bg-blue-50 border-blue-500 ring-2 ring-blue-200';
+          icon = '<div class="w-5 h-5 rounded-full border border-blue-500 bg-white flex items-center justify-center"><div class="w-2.5 h-2.5 rounded-full bg-blue-500"></div></div>';
+        } else if (state.submitted) {
+          if (idx === correctIndex) {
+            style = 'bg-emerald-50 border-emerald-300 ring-2 ring-emerald-200';
+            icon = '<div class="w-5 h-5 rounded-full bg-emerald-500 border-emerald-500 flex items-center justify-center"><span class="material-symbols-outlined text-white text-sm">check</span></div>';
+          } else if (idx === state.selected) {
+            style = 'bg-red-50 border-red-300 ring-2 ring-red-200';
+            icon = '<div class="w-5 h-5 rounded-full border-red-500 flex items-center justify-center"><span class="material-symbols-outlined text-red-500 text-sm">close</span></div>';
+          } else {
+            style = 'bg-slate-50 border-slate-200 opacity-60';
+          }
+        }
+        const clickAttr = !state.submitted ? `onclick="selectQuizOption('${id}', ${idx})"` : '';
+        return `<button ${clickAttr} class="quiz-option text-left w-full p-4 rounded-2xl border transition-all duration-200 flex items-start gap-3 mb-3 ${style}">${icon}<span class="text-sm leading-relaxed ${state.submitted && idx === correctIndex ? 'font-bold text-emerald-900' : 'text-slate-700'}">${opt}</span></button>`;
+      }).join('');
+
+      const feedback = state.submitted
+        ? `<div class="mt-5 p-5 rounded-2xl ${isCorrect ? 'bg-emerald-50 border border-emerald-200 text-emerald-900' : 'bg-red-50 border border-red-200 text-red-900'} fade-in"><div class="flex items-center gap-2 font-bold mb-2"><span class="material-symbols-outlined">${isCorrect ? 'check_circle' : 'cancel'}</span>${isCorrect ? 'Correct' : 'Incorrect'}</div><p class="text-sm leading-relaxed">${explanation}</p></div>`
+        : `<button onclick="submitQuiz('${id}', ${correctIndex})" class="mt-4 w-full py-3.5 rounded-2xl font-bold transition-all ${state.selected !== null ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-600/20' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}" ${state.selected === null ? 'disabled' : ''}>Submit Answer</button>`;
+
+      return `
+        <div class="medical-card p-0 overflow-hidden mt-6">
+          <div class="medical-card-header flex items-center justify-between gap-4">
+            <div>
+              <div class="pill">Knowledge Check</div>
+              <h3 class="font-bold text-slate-900 mt-3 text-lg leading-snug">${question}</h3>
+            </div>
+          </div>
+          <div class="p-5 md:p-6">
+            ${optionsHtml}
+            ${feedback}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderClinicalVideoBlock(key, name, posterSrc, videoSrc, observationText, opts = {}) {
+      const posterMaxClass = opts.posterMaxClass || 'max-h-[360px]';
+      const label = opts.label || 'Simulate Patient Encounter';
+      return `
+        <div class="clinical-shell my-6" data-clinical-video-block="1" data-cv-key="${key}">
+          <button type="button" class="w-full relative block group fade-swap swap-visible" data-cv-poster aria-label="Play ${name} clinical observation video">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-cyan-300/10 z-10"></div>
+            <img src="${posterSrc}" alt="${name}" class="w-full ${posterMaxClass} object-cover opacity-75 group-hover:opacity-95 transition duration-500" />
+            <div class="absolute inset-0 dot-grid opacity-20"></div>
+            <div class="absolute inset-0 flex items-center justify-center z-20">
+              <div class="h-20 w-20 rounded-full bg-blue-500/85 backdrop-blur border border-blue-300/40 shadow-2xl flex items-center justify-center group-hover:scale-110 transition duration-300">
+                <span class="material-symbols-outlined text-white text-4xl">play_arrow</span>
+              </div>
+            </div>
+            <div class="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-transparent z-20 text-left">
+              <div class="text-white font-semibold text-xl">${label}</div>
+              <div class="text-blue-200 text-sm mt-1">Interactive clinical observation and patient-reported burden</div>
+            </div>
+          </button>
+
+          <div class="hidden relative fade-swap swap-hidden bg-slate-900" data-cv-wrap>
+            <div class="w-full min-h-[320px] md:min-h-[360px] flex flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950">
+              <div class="pill !bg-blue-500/15 !text-blue-100 !border-blue-300/20 mb-4">Patient Report</div>
+              <div class="bg-blue-500/20 p-4 rounded-full mb-4 border border-blue-300/10">
+                <span class="material-symbols-outlined text-5xl text-blue-300">forum</span>
+              </div>
+              <h3 class="font-semibold text-2xl text-white mb-3">${name}</h3>
+              <p class="text-slate-200 max-w-3xl mx-auto leading-relaxed text-lg italic">${observationText}</p>
+            </div>
+            <button type="button" class="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white rounded-full p-2.5 backdrop-blur transition" data-cv-replay aria-label="Close report">
+              <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function initClinicalVideos() {
+      const blocks = document.querySelectorAll('[data-clinical-video-block="1"]');
+      blocks.forEach(block => {
+        const posterBtn = block.querySelector('[data-cv-poster]');
+        const wrap = block.querySelector('[data-cv-wrap]');
+        const replayBtn = block.querySelector('[data-cv-replay]');
+        if (!posterBtn || !wrap) return;
+
+        const showContent = () => {
+          posterBtn.classList.add('swap-hidden');
+          posterBtn.classList.remove('swap-visible');
+          setTimeout(() => posterBtn.classList.add('hidden'), 280);
+          wrap.classList.remove('hidden');
+          requestAnimationFrame(() => {
+            wrap.classList.remove('swap-hidden');
+            wrap.classList.add('swap-visible');
+          });
+        };
+
+        const hideContent = () => {
+          wrap.classList.add('swap-hidden');
+          wrap.classList.remove('swap-visible');
+          setTimeout(() => wrap.classList.add('hidden'), 280);
+          posterBtn.classList.remove('hidden');
+          requestAnimationFrame(() => {
+            posterBtn.classList.remove('swap-hidden');
+            posterBtn.classList.add('swap-visible');
+          });
+        };
+
+        posterBtn.addEventListener('click', showContent);
+        if (replayBtn) replayBtn.addEventListener('click', hideContent);
+      });
+    }
+
+    function renderSidebar() {
+      const container = document.getElementById('nav-container');
+      let html = '';
+      for (const modKey in appData.modules) {
+        const module = appData.modules[modKey];
+        html += `<div class="mb-2"><div class="px-2 pb-2 text-[11px] uppercase tracking-[0.2em] text-blue-100/55 font-semibold">${module.title}</div><div class="space-y-2">`;
+        module.sections.forEach(section => {
+          const isActive = activeModuleId === modKey && activeSectionId === section.id;
+          const activeClass = isActive ? `active-${module.color}` : 'text-white/82';
+          html += `
+            <button onclick="navigateTo('${modKey}', '${section.id}')" class="nav-btn ${activeClass}">
+              <div class="nav-icon ${isActive ? 'bg-slate-900/6 text-current' : ''}"><span class="material-symbols-outlined text-[18px]">${section.icon}</span></div>
+              <div class="min-w-0">
+                <div class="font-semibold leading-tight">${section.title}</div>
+                <div class="text-xs mt-1 ${isActive ? 'opacity-75' : 'text-white/45'}">Interactive learning section</div>
+              </div>
+            </button>
+          `;
+        });
+        html += `</div></div>`;
+      }
+      container.innerHTML = html;
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const percent = getProgressPercent();
+      const index = getSectionIndex(activeModuleId, activeSectionId) + 1;
+      const total = getAllSections().length;
+      document.getElementById('progress-fill').style.width = `${percent}%`;
+      document.getElementById('progress-text').textContent = `${index} / ${total}`;
+    }
+
+    function renderMainContent() {
+      const module = appData.modules[activeModuleId];
+      const section = module.sections.find(s => s.id === activeSectionId);
+      document.getElementById('breadcrumb-module').textContent = module.title;
+      document.getElementById('breadcrumb-section').textContent = section.title;
+      const contentContainer = document.getElementById('main-content');
+      contentContainer.innerHTML = getSectionContent(activeModuleId, activeSectionId);
+      contentContainer.scrollTop = 0;
+      renderSidebar();
+      initClinicalVideos();
+      if (window.innerWidth < 768) {
+        document.getElementById('sidebar').classList.add('-translate-x-full');
+        document.getElementById('sidebar-overlay').classList.add('hidden');
+      }
+    }
+
+    function navigateTo(modId, secId) {
+      activeModuleId = modId;
+      activeSectionId = secId;
+      renderMainContent();
+    }
+
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      if (sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    window.selectQuizOption = function(qid, idx) {
+      if (!quizStates[qid]) quizStates[qid] = { submitted: false };
+      quizStates[qid].selected = idx;
+      renderMainContent();
+    }
+
+    window.submitQuiz = function(qid, idx) {
+      if (!quizStates[qid]) return;
+      quizStates[qid].submitted = true;
+      renderMainContent();
+    }
+
+    function getSectionContent(moduleId, sectionId) {
+      const nav = getPrevNext(moduleId, sectionId);
+
+      if (moduleId === 'post_rux') {
+        if (sectionId === 'intro') return `
+          ${renderHero('post_rux', 'Practice Gap 1', 'The high-risk post-ruxolitinib interval.', 'Most patients eventually develop inadequate response or intolerance to ruxolitinib. The period immediately following discontinuation carries severe survival risks if targeted therapy is not rapidly initiated.', [
+            { label: 'Median OS', value: '11.1 mo', copy: 'Overall survival after ruxolitinib discontinuation without subsequent targeted therapy.' },
+            { label: 'Median PFS', value: '6.0 mo', copy: 'Progression-free survival in the post-ruxolitinib real-world setting.' },
+            { label: 'Transfusion Burden', value: '>30%', copy: 'Patients requiring RBC transfusions within 30 days of discontinuation.' }
+          ])}
+          <section class="section-shell">
+            <div class="medical-grid">
+              <div class="medical-card col-span-12 lg:col-span-8 p-6 md:p-7">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="h-11 w-11 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center"><span class="material-symbols-outlined">analytics</span></div>
+                  <div>
+                    <div class="text-sm uppercase tracking-[0.18em] text-slate-500 font-bold">Clinical takeaway</div>
+                    <h2 class="text-2xl font-black text-slate-900">The danger of non-targeted supportive care.</h2>
+                  </div>
+                </div>
+                <p class="text-slate-600 leading-relaxed text-[15px]">Clinicians frequently transition patients to non-targeted supportive agents rather than approved second-line JAK inhibitors, missing crucial opportunities to extend survival. Clonal evolution—the acquisition of new somatic mutations while on treatment—leads to even worse outcomes, with a median survival of only 6 months.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                  <div class="feature-card border-l-4 border-rose-400">
+                    <div class="text-sm font-bold text-slate-900 mb-2">Common Non-Targeted Regimens</div>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                      <li class="flex gap-2"><span class="material-symbols-outlined text-rose-500 text-[18px]">cancel</span>Glucocorticoids alone</li>
+                      <li class="flex gap-2"><span class="material-symbols-outlined text-rose-500 text-[18px]">cancel</span>Hydroxyurea</li>
+                      <li class="flex gap-2"><span class="material-symbols-outlined text-rose-500 text-[18px]">cancel</span>Danazol</li>
+                    </ul>
+                    <p class="text-xs text-rose-700 mt-2 font-semibold">Do not offer demonstrated survival benefit in post-rux MF.</p>
+                  </div>
+                  <div class="feature-card border-l-4 border-emerald-500">
+                    <div class="text-sm font-bold text-slate-900 mb-2">NCCN Preferred Options</div>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                      <li class="flex gap-2"><span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>Enrollment in Clinical Trial</li>
+                      <li class="flex gap-2"><span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>Fedratinib</li>
+                      <li class="flex gap-2"><span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>Pacritinib or Momelotinib</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="medical-card col-span-12 lg:col-span-4 p-6 md:p-7 bg-gradient-to-br from-white to-rose-50/50">
+                <div class="pill !bg-rose-100 !text-rose-700 !border-rose-200">The Discontinuation Window</div>
+                <div class="space-y-4 mt-5">
+                  <p class="text-sm text-slate-600 leading-relaxed">Most intermediate or high-risk MF patients are initiated on ruxolitinib. However, real-world analyses indicate the median time to discontinuation is approximately <strong>9 months</strong>.</p>
+                  <div class="pt-4 border-t border-rose-100">
+                    <div class="text-sm text-slate-600 leading-relaxed">Recognizing inadequate response, resistance, or intolerance early is paramount to safely bridging the patient to an effective second-line therapy.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            ${renderNavigationButtons(null, { moduleId:'post_rux', sectionId:'guidelines', label:'Second-Line Options' })}
+          </section>
+        `;
+
+        if (sectionId === 'guidelines') return `
+          <section class="section-shell slide-up">
+            ${renderSectionHeader('post_rux', 'NCCN-Recommended Second-Line JAK Inhibitors', 'Clinical practice has not consistently reflected the availability of three additional approved JAK inhibitors. Here is how NCCN guidelines categorize them based on patient characteristics.')}
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+              <div class="feature-card border-t-4 border-rose-400">
+                <div class="pill mb-3">Fedratinib (Category 1)</div>
+                <h3 class="text-xl font-black text-slate-900">Broad Second-Line Efficacy</h3>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">Demonstrated superior spleen volume reduction vs best available therapy in the FREEDOM2 trial (36% vs 6%). Flatiron data indicates a 12-month survival rate of 71.6% (vs 53.5% non-fedratinib care).</p>
+              </div>
+
+              <div class="feature-card border-t-4 border-slate-800">
+                <div class="pill !bg-slate-100 !text-slate-700 !border-slate-300 mb-3">Pacritinib</div>
+                <h3 class="text-xl font-black text-slate-900">Severe Thrombocytopenia</h3>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">Specifically provides a targeted option for patients with severe thrombocytopenia (platelet count &lt;50 &times; 10&#8309;/L), a population that was previously excluded from most other JAK inhibitor trials.</p>
+              </div>
+
+              <div class="feature-card border-t-4 border-indigo-500">
+                <div class="pill !bg-indigo-50 !text-indigo-700 !border-indigo-200 mb-3">Momelotinib (Category 2B)</div>
+                <h3 class="text-xl font-black text-slate-900">Concurrent Anemia</h3>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">Provides a targeted option in patients with concurrent anemia and ongoing symptomatic splenomegaly and/or constitutional symptoms due to its unique mechanism.</p>
+              </div>
+            </div>
+            <div class="medical-card p-6 md:p-7">
+              <div class="pill">Clinical Application</div>
+              <h3 class="text-xl font-black text-slate-900 mt-4">Personalize the switch.</h3>
+              <p class="text-slate-600 mt-3 leading-relaxed">Transitioning a patient requires assessing their platelet counts, hemoglobin levels, and mutational profile. Delaying the switch to rely on steroids or hydroxyurea abandons the proven survival benefit of these second-line targeted therapies.</p>
+            </div>
+            ${renderNavigationButtons({ moduleId:'post_rux', sectionId:'intro', label:'The Danger Zone' }, { moduleId:'post_rux', sectionId:'check1', label:'Case Study: Robert' })}
+          </section>
+        `;
+
+        if (sectionId === 'check1') return `
+          <section class="section-shell slide-up">
+            ${renderSectionHeader('post_rux', 'Case Study: Robert', 'Robert is experiencing loss of response to first-line therapy. The focus is on recognizing the critical drop-off in outcomes if targeted therapy is halted without a clear next step.')}
+            <div class="medical-grid">
+              <div class="medical-card col-span-12 lg:col-span-4 p-6 md:p-7 bg-gradient-to-br from-white to-rose-50/40">
+                <div class="pill !bg-rose-100 !text-rose-700 !border-rose-200">Patient Profile</div>
+                <div class="mt-5 flex items-start gap-4">
+                  <div class="w-14 h-14 rounded-2xl bg-slate-200 text-slate-700 flex items-center justify-center text-xl font-black">R</div>
+                  <div>
+                    <h3 class="text-xl font-black text-slate-900">Robert</h3>
+                    <p class="text-sm text-slate-600 mt-1">64-year-old male with intermediate-2 risk MF.</p>
+                  </div>
+                </div>
+                <div class="mt-6 rounded-2xl border border-rose-100 bg-white p-4 text-sm text-slate-600 leading-relaxed">
+                  <strong class="text-slate-900 block mb-1">Clinical Context</strong>
+                  Robert has been on ruxolitinib for 10 months but is now experiencing progressive splenomegaly and return of night sweats.
+                </div>
+              </div>
+              <div class="col-span-12 lg:col-span-8">
+                ${renderClinicalVideoBlock('robert', 'Robert', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=1200&q=80', '#', '“I felt better for the first six months, but my spleen is getting huge again. I feel full after eating just a few bites, and I am waking up drenched in sweat again. Should we just stop the pills?”', { posterMaxClass: 'h-[340px] md:h-[380px] object-cover object-top', label: 'Robert Clinical Observation' })}
+              </div>
+            </div>
+            ${renderQuizComponent('quiz-robert', 'According to real-world analyses, what is the approximate median overall survival for a patient like Robert if he discontinues ruxolitinib and does NOT receive subsequent targeted therapy?', [
+              '5.5 years',
+              '2.5 years',
+              '11.1 months',
+              '3.2 months'
+            ], 2, 'Correct. Real-world data (Mascarenhas 2020) shows a median OS of 11.1 months post-ruxolitinib discontinuation without subsequent targeted therapy, underscoring the critical need to transition patients to NCCN-recommended second-line options like fedratinib, pacritinib, or momelotinib.')}
+            ${renderNavigationButtons({ moduleId:'post_rux', sectionId:'guidelines', label:'Second-Line Options' }, { moduleId:'anemia', sectionId:'intro', label:'Prognostic Significance' })}
+          </section>
+        `;
+      }
+
+      if (moduleId === 'anemia') {
+        if (sectionId === 'intro') return `
+          ${renderHero('anemia', 'Practice Gap 2', 'Anemia is not just a symptom; it is an independent driver of survival.', 'Anemia affects a majority of patients with MF and standard JAK inhibitors often exacerbate it. Treatment selection must elevate anemia management from supportive care to a primary therapeutic target.', [
+            { label: 'Grade 3-4 Anemia', value: '22.5%', copy: 'Prevalence at the initiation of ruxolitinib therapy.' },
+            { label: '5-Year PFS', value: '27%', copy: 'Progression-free survival drops to 27% in those with severe anemia (vs 70%).' },
+            { label: 'Blast-Phase Risk', value: 'Elevated', copy: 'Transfusion-dependent patients have the highest rate of blast-phase transformation.' }
+          ])}
+          <section class="section-shell">
+            <div class="medical-grid">
+              <div class="medical-card col-span-12 lg:col-span-7 p-6 md:p-7">
+                <div class="flex items-start gap-4 mb-5">
+                  <div class="h-12 w-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[28px]">opacity</span></div>
+                  <div>
+                    <div class="pill !bg-blue-100 !text-blue-700 !border-blue-200">Multifactorial Pathobiology</div>
+                    <h2 class="text-2xl font-black text-slate-900 mt-3">The Anemia Pathogenesis</h2>
+                    <p class="text-slate-600 mt-2 leading-relaxed">MF-associated anemia is driven by ineffective erythropoiesis from marrow fibrosis, dilutional anemia from massive splenomegaly, and importantly, <strong>iron-restricted anemia mediated by elevated hepcidin</strong>.</p>
+                  </div>
+                </div>
+                <div class="feature-card border-l-4 border-blue-400">
+                  <h3 class="font-bold text-slate-900 mb-2">Why older approaches fail</h3>
+                  <p class="text-sm text-slate-600 leading-relaxed">Historically, treatment selection prioritized spleen volume and symptom responses. Anemia management was limited to ESAs, danazol, or transfusions—none of which address the underlying iron-restriction pathobiology driven by hepcidin overexpression.</p>
+                </div>
+              </div>
+              <div class="medical-card col-span-12 lg:col-span-5 p-6 md:p-7 bg-gradient-to-br from-white to-blue-50/50">
+                <div class="pill">RUX-MF Cohort Reality</div>
+                <div class="mt-5">
+                  <div class="flex items-center justify-between text-sm font-semibold text-slate-600 mb-2"><span>No Anemia PFS (5-yr)</span><span>70%</span></div>
+                  <div class="w-full bg-slate-200 rounded-full h-4 overflow-hidden mb-4"><div class="h-4 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400" style="width:70%"></div></div>
+                  
+                  <div class="flex items-center justify-between text-sm font-semibold text-slate-600 mb-2"><span>Grade 3-4 Anemia PFS (5-yr)</span><span>27%</span></div>
+                  <div class="w-full bg-slate-200 rounded-full h-4 overflow-hidden"><div class="h-4 rounded-full bg-gradient-to-r from-red-500 to-rose-400" style="width:27%"></div></div>
+                </div>
+                <div class="mt-5 pt-5 border-t border-slate-200 text-sm text-slate-600 leading-relaxed">
+                  Patients who acquire severe anemia during ruxolitinib therapy also experience significantly worse blast-phase-free survival.
+                </div>
+              </div>
+            </div>
+            ${renderNavigationButtons({ moduleId:'post_rux', sectionId:'check1', label:'Case Study: Robert' }, { moduleId:'anemia', sectionId:'momelotinib', label:'ACVR1 & Momelotinib' })}
+          </section>
+        `;
+
+        if (sectionId === 'momelotinib') return `
+          <section class="section-shell slide-up">
+            ${renderSectionHeader('anemia', 'The Momelotinib Difference', 'Understanding the mechanistic rationale behind new NCCN Category 1 recommendations for anemia-directed therapy.')}
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              <div class="feature-card border-t-4 border-indigo-500">
+                <div class="pill !bg-indigo-50 !text-indigo-700 !border-indigo-200">The ACVR1 Mechanism</div>
+                <h3 class="text-xl font-black text-slate-900 mt-4">Targeting Hepcidin</h3>
+                <p class="text-sm text-slate-600 mt-3 leading-relaxed">Hepcidin is a key regulator of iron homeostasis, driven in part by the BMP6/ACVR1/SMAD signaling pathway. Momelotinib is a first-in-class inhibitor of <strong>JAK1, JAK2, and ACVR1</strong>. By inhibiting ACVR1, momelotinib suppresses hepcidin expression, restoring iron-restricted erythropoiesis.</p>
+              </div>
+              <div class="feature-card border-t-4 border-blue-500">
+                <div class="pill !bg-blue-50 !text-blue-700 !border-blue-200">The MOMENTUM Trial</div>
+                <h3 class="text-xl font-black text-slate-900 mt-4">Clinical Efficacy</h3>
+                <ul class="mt-4 space-y-3 text-sm text-slate-600">
+                  <li class="flex gap-2"><span class="material-symbols-outlined text-blue-500 text-[18px]">check_circle</span>Superior to danazol in symptom response rate</li>
+                  <li class="flex gap-2"><span class="material-symbols-outlined text-blue-500 text-[18px]">check_circle</span>Superior in spleen response rate at week 24</li>
+                  <li class="flex gap-2"><span class="material-symbols-outlined text-blue-500 text-[18px]">check_circle</span>Superior in achieving transfusion independence</li>
+                </ul>
+              </div>
+            </div>
+            <div class="medical-card p-6 md:p-7 bg-gradient-to-r from-slate-900 to-navy-2 text-white border-0">
+              <div class="pill !bg-white/10 !text-white !border-white/20">NCCN Guidelines Update</div>
+              <h3 class="text-xl font-black mt-4">Category 1 Recommendation</h3>
+              <p class="text-blue-100 mt-3 leading-relaxed max-w-3xl">NCCN guidelines now include a category 1 recommendation for momelotinib for patients with ongoing symptomatic splenomegaly and/or constitutional symptoms and MF-associated anemia. Treatment selection must systematically incorporate hemoglobin levels and transfusion burden.</p>
+            </div>
+            ${renderNavigationButtons({ moduleId:'anemia', sectionId:'intro', label:'Prognostic Significance' }, { moduleId:'anemia', sectionId:'check2', label:'Case Study: Sarah' })}
+          </section>
+        `;
+
+        if (sectionId === 'check2') return `
+          <section class="section-shell slide-up">
+            ${renderSectionHeader('anemia', 'Case Study: Sarah', 'Sarah is symptomatic from both splenomegaly and worsening anemia. Treatment must balance symptom control with hemoglobin recovery.')}
+            <div class="medical-grid">
+              <div class="medical-card col-span-12 lg:col-span-4 p-6 md:p-7 bg-gradient-to-br from-white to-blue-50/40">
+                <div class="pill">Patient Profile</div>
+                <div class="mt-5 flex items-start gap-4">
+                  <div class="w-14 h-14 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl font-black">S</div>
+                  <div>
+                    <h3 class="text-xl font-black text-slate-900">Sarah</h3>
+                    <p class="text-sm text-slate-600 mt-1">71-year-old with primary MF, spleen volume 18cm, and Hb 7.8 g/dL.</p>
+                  </div>
+                </div>
+                <div class="mt-6 rounded-2xl border border-indigo-100 bg-white p-4 text-sm text-slate-600 leading-relaxed">
+                  <strong class="text-slate-900 block mb-1">Clinical Context</strong>
+                  She requires RBC transfusions every 3 weeks. Her current therapy controls her spleen moderately but exacerbates her anemia.
+                </div>
+              </div>
+              <div class="col-span-12 lg:col-span-8">
+                ${renderClinicalVideoBlock('sarah', 'Sarah', 'https://images.unsplash.com/photo-1551836022-b06985bceb24?auto=format&fit=crop&w=1200&q=80', '#', '“I’m exhausted all the time. I have to come into the clinic for blood transfusions constantly now. Is there any treatment that can help my spleen without destroying my red blood cells?”', { posterMaxClass: 'h-[340px] md:h-[380px] object-cover object-top', label: 'Sarah Clinical Observation' })}
+              </div>
+            </div>
+            ${renderQuizComponent('quiz-sarah', 'Which specific mechanistic target differentiates momelotinib from other approved JAK inhibitors, allowing it to address Sarah’s MF-associated anemia by suppressing hepcidin?', [
+              'PI3K pathway',
+              'ACVR1 (ALK2)',
+              'CALR mutation',
+              'PIM1 kinase'
+            ], 1, 'Correct. Momelotinib uniquely inhibits ACVR1 in addition to JAK1/JAK2. This suppression downregulates hepcidin, restoring iron metabolism and allowing for erythropoiesis in anemic patients.')}
+            ${renderNavigationButtons({ moduleId:'anemia', sectionId:'momelotinib', label:'ACVR1 & Momelotinib' }, { moduleId:'novel', sectionId:'intro', label:'Exhausted Therapies' })}
+          </section>
+        `;
+      }
+
+      if (moduleId === 'novel') {
+        if (sectionId === 'intro') return `
+          ${renderHero('novel', 'Practice Gap 3', 'What happens when all four JAK inhibitors are exhausted?', 'A growing population of patients has exhausted all approved pharmacologic options. Understanding the biology of emerging pathways like PIM1 is essential for timely clinical trial referral.', [
+            { label: 'Approved JAKs', value: '4', copy: 'Ruxolitinib, fedratinib, pacritinib, and momelotinib.' },
+            { label: 'Next Steps', value: 'Trials', copy: 'NCCN prefers clinical trial enrollment post-JAK failure.' },
+            { label: 'Major Limitation', value: 'Toxicity', copy: 'Cytopenias from disease and therapy limit later lines of care.' }
+          ])}
+          <section class="section-shell">
+            <div class="medical-grid">
+              <div class="medical-card col-span-12 p-6 md:p-7">
+                <div class="pill !bg-emerald-100 !text-emerald-700 !border-emerald-200">The Biological Rationale</div>
+                <h2 class="text-2xl font-black text-slate-900 mt-4">The PIM1 Kinase Pathway</h2>
+                <p class="text-slate-600 mt-3 leading-relaxed">PIM1 kinase has emerged as a biologically rational therapeutic target. It is overexpressed in hematologic malignancies including MF, promotes cell survival and proliferation by modulating cytokine-driven signaling pathways (like PI3K/AKT and JAK/STAT), and is specifically upregulated by JAK2 V617F mutant cells.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
+                  <div class="rounded-2xl border border-red-200 bg-red-50 p-5">
+                    <h3 class="font-bold text-red-900 mb-2">The Pan-PIM Problem</h3>
+                    <p class="text-sm text-red-800 leading-relaxed">In preclinical models, utilizing pan-PIM kinase knockout or inhibition resulted in severe thrombocytopenia, limiting its utility in a disease where cytopenias are already a massive burden.</p>
+                  </div>
+                  <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+                    <h3 class="font-bold text-emerald-900 mb-2">The Selective PIM1 Solution</h3>
+                    <p class="text-sm text-emerald-800 leading-relaxed">Selective PIM1 knockout prevents MF progression <strong>without</strong> reducing platelet counts. This supports the hypothesis that selective PIM1 inhibition achieves antifibrotic effects with limited hematologic toxicity.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            ${renderNavigationButtons({ moduleId:'anemia', sectionId:'check2', label:'Case Study: Sarah' }, { moduleId:'novel', sectionId:'nuvisertib', label:'PIM1 & Nuvisertib' })}
+          </section>
+        `;
+
+        if (sectionId === 'nuvisertib') return `
+          <section class="section-shell slide-up">
+            ${renderSectionHeader('novel', 'Nuvisertib (TP-3654): The Novel Option', 'Nuvisertib is an oral, highly selective PIM1 kinase inhibitor currently under evaluation in Phase 1/2 studies for relapsed/refractory MF.')}
+            <div class="space-y-4">
+              <div class="feature-card border-l-4 border-emerald-500">
+                <div class="flex items-start gap-4">
+                  <div class="h-12 w-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0"><span class="material-symbols-outlined">science</span></div>
+                  <div>
+                    <h3 class="text-xl font-black text-slate-900">Phase 1/2 Monotherapy Data</h3>
+                    <p class="text-sm text-slate-600 mt-2 leading-relaxed">At 720 mg twice-daily, nuvisertib was well tolerated with no dose-limiting toxicities. Evaluated patients achieved spleen volume reduction (&ge;25% in 22.2%), total symptom score reduction (&ge;50% in 44.4%), and bone marrow fibrosis improvement (42.9%). Hemoglobin and platelet responses were also observed.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="feature-card border-l-4 border-teal-500">
+                <div class="flex items-start gap-4">
+                  <div class="h-12 w-12 rounded-2xl bg-teal-100 text-teal-700 flex items-center justify-center shrink-0"><span class="material-symbols-outlined">join_inner</span></div>
+                  <div>
+                    <h3 class="text-xl font-black text-slate-900">Combination Therapy Potential</h3>
+                    <p class="text-sm text-slate-600 mt-2 leading-relaxed">Preliminary data combining nuvisertib with momelotinib demonstrated a favorable safety profile across dose cohorts, with clinical responses providing early proof-of-concept for dual PIM1 and JAK/ACVR1 pathway inhibition.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="feature-card border-l-4 border-blue-500">
+                <div class="flex items-start gap-4">
+                  <div class="h-12 w-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0"><span class="material-symbols-outlined">workspace_premium</span></div>
+                  <div>
+                    <h3 class="text-xl font-black text-slate-900">Regulatory Designations</h3>
+                    <p class="text-sm text-slate-600 mt-2 leading-relaxed">Granted FDA Fast Track Designation (June 2025) and Orphan Drug Designation (FDA and Japan MHLW), recognizing its potential to address severe unmet medical needs in MF patients with limited treatment options.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            ${renderNavigationButtons({ moduleId:'novel', sectionId:'intro', label:'Exhausted Therapies' }, { moduleId:'novel', sectionId:'check3', label:'Clinical Validation' })}
+          </section>
+        `;
+
+        if (sectionId === 'check3') return `
+          <section class="section-shell slide-up">
+            ${renderSectionHeader('novel', 'Clinical Assessment: Investigational Referral', 'Identify the specific rationale for novel clinical trial pathways when NCCN-approved options are exhausted.')}
+            
+            ${renderQuizComponent('quiz-nuvisertib', 'What is a key preclinical rationale for targeting PIM1 specifically (as with nuvisertib), rather than utilizing a pan-PIM kinase inhibitor, in relapsed/refractory MF?', [
+              'Pan-PIM inhibitors cause severe thrombocytopenia, whereas selective PIM1 inhibition limits hematologic toxicity.',
+              'Pan-PIM inhibitors are exclusively available as intravenous therapies.',
+              'PIM1 is the only kinase mutated in primary myelofibrosis.',
+              'PIM2 and PIM3 are entirely absent in human bone marrow.'
+            ], 0, 'Correct. Preclinical models showed that selective PIM1 knockout prevented MF progression without reducing platelet counts, whereas pan-PIM kinase knockout caused severe thrombocytopenia. This makes selective PIM1 inhibition highly appealing in a cytopenic patient population.')}
+            
+            <div class="completion-shell p-6 md:p-7 mt-8">
+              <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+                <div>
+                  <div class="chip">Module Complete</div>
+                  <h3 class="text-2xl md:text-3xl font-black mt-3">Myelofibrosis Clinical Track Complete.</h3>
+                  <p class="text-white/80 mt-3 max-w-2xl leading-relaxed">You have reviewed key protocols for post-ruxolitinib transitions, applied anemia-directed ACVR1 strategies, and evaluated the emerging mechanistic profile of PIM1 inhibitors like nuvisertib.</p>
+                </div>
+                <button class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white text-slate-900 font-bold shadow-xl hover:bg-slate-100 transition" onclick="alert('Module Complete! Thank you for reviewing the Myelofibrosis updates.')">
+                  Finish Module
+                  <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                </button>
+              </div>
+            </div>
+            ${renderNavigationButtons({ moduleId:'novel', sectionId:'nuvisertib', label:'PIM1 & Nuvisertib' }, null)}
+          </section>
+        `;
+      }
+
+      return '';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderMainContent();
+    });
+  </script>
+</body>
+</html>
